@@ -5,6 +5,7 @@ var {
   AppRegistry,
   MapView,
   View,
+  Text,
   StyleSheet
 } = React;
 
@@ -23,12 +24,19 @@ var Weather = React.createClass({
       ];
 
       return(
-        <MapView 
-          style={styles.map}
-          annotations={[this.state.pin]}
-          onRegionChangeComplete={this.onRegionChangeComplete}
-          >
-        </MapView>
+        <View style={styles.container}>
+          <MapView 
+            style={styles.map}
+            annotations={[this.state.pin]}
+            onRegionChangeComplete={this.onRegionChangeComplete}
+            >
+          </MapView>
+          <View style={styles.textWrapper}>
+            <Text style={styles.text}>{this.state.city}</Text>
+            <Text style={styles.text}>{this.state.temperature}</Text>
+            <Text style={styles.text}>{this.state.description}</Text>
+          </View>
+        </View>
       )
     },
     onRegionChangeComplete: function(region){
@@ -46,13 +54,32 @@ var Weather = React.createClass({
       Api(region.latitude, region.longitude)
         .then((data) => {
             console.log(data);
+            this.setState({
+              city: data.city,
+              temperature: data.temperature,
+              description: data.description
+            });
         });
     }
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: '#F5FCFF'
+  },
   map: {
-    flex: 1
+    flex: 2,
+    marginTop: 30
+  },
+  textWrapper: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  text: {
+    fontSize: 30
   }
 });
 
